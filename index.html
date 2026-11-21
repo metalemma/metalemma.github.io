@@ -3,12 +3,12 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>metalemma — independent games for virtual reality</title>
-<meta name="description" content="metalemma is an independent studio making games for virtual reality. Its first game, MolCraft, is coming to the Meta Horizon Store for Meta Quest.">
+<title>MetaLemma — independent games for virtual reality</title>
+<meta name="description" content="MetaLemma is an independent studio making games for virtual reality. Its first game, MolCraft, is coming to the Meta Horizon Store for Meta Quest.">
 <meta name="theme-color" content="#02040a">
 <meta property="og:type" content="website">
-<meta property="og:site_name" content="metalemma">
-<meta property="og:title" content="metalemma — independent games for virtual reality">
+<meta property="og:site_name" content="MetaLemma">
+<meta property="og:title" content="MetaLemma — independent games for virtual reality">
 <meta property="og:description" content="An independent studio making games for virtual reality.">
 <meta property="og:url" content="https://metalemma.github.io/">
 <meta property="og:image" content="https://metalemma.github.io/assets/og.jpg">
@@ -169,6 +169,17 @@
     content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--coral);
     box-shadow: 0 0 0 0 rgba(224, 118, 77, 0.6); animation: ping 2.4s ease-out infinite;
   }
+  .game .status {
+    display: inline-flex; align-items: center; gap: 9px;
+    padding: 7px 14px; border-radius: 999px;
+    border: 1px dashed var(--line-strong);
+    font-size: 14px; color: var(--ink-2);
+  }
+  .game .status::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--blue); }
+  /* in development: no page to open, so no lift, and the title is not a link */
+  .game.wip:hover { transform: none; box-shadow: none; border-color: var(--line); }
+  .game.wip:hover figure img { transform: none; }
+  .game.wip h3 { color: var(--ink-2); font-weight: 300; }
   a.store { position: relative; z-index: 2; color: var(--ink); border-color: rgba(224, 118, 77, 0.5); }
   a.store:hover { border-color: var(--coral); background: rgba(224, 118, 77, 0.12); }
   @keyframes ping { 70%, 100% { box-shadow: 0 0 0 8px rgba(224, 118, 77, 0); } }
@@ -244,7 +255,7 @@
 
 <header class="bar">
   <div class="wrap">
-    <a class="studio-mark" href="./" aria-label="metalemma home"><span class="dot" aria-hidden="true"></span>metalemma</a>
+    <a class="studio-mark" href="./" aria-label="MetaLemma home"><span class="dot" aria-hidden="true"></span>MetaLemma</a>
     <nav aria-label="Site">
       <a href="#works">Works</a>
       <a href="#contact">Contact</a>
@@ -263,7 +274,7 @@
     <div class="wrap">
       <div class="hero-copy">
         <span class="label">Independent studio</span>
-        <h1 id="studio-title">metalemma<span>.</span></h1>
+        <h1 id="studio-title">MetaLemma<span>.</span></h1>
         <p class="lede">We make games for <strong>virtual reality</strong>, built for the headset.</p>
         <a class="jump" href="#works">See our works <span aria-hidden="true">↓</span></a>
       </div>
@@ -275,9 +286,9 @@
       <div class="sec-head reveal">
         <div>
           <span class="label">Works</span>
-          <h2 id="works-title">Games we've made</h2>
+          <h2 id="works-title">Our games</h2>
         </div>
-        <span class="count"><b>01</b> title</span>
+        <span class="count"><b>02</b> titles</span>
       </div>
 
       <div class="games">
@@ -307,6 +318,11 @@
           Store slot: once the store page is live, replace the span with
           <a class="store" href="https://www.meta.com/experiences/...">Get it on Meta Horizon Store</a>
           Never put a placeholder URL there.
+
+          A title in development has no page or store link yet: add the class "wip", keep the
+          <h3> as plain text, and use a status chip instead of the store slot (see No. 02 below).
+          When it gets a page, remove "wip", wrap the title in <a href="GAME/">, and swap in the
+          normal actions row.
         -->
         <article class="game reveal">
           <figure>
@@ -323,6 +339,21 @@
             <div class="actions">
               <span class="store">Coming to Meta Horizon Store</span>
               <span class="go" aria-hidden="true">View game <span>→</span></span>
+            </div>
+          </div>
+        </article>
+
+        <article class="game wip reveal">
+          <figure>
+            <img src="assets/ski-placeholder.svg" width="1600" height="900" alt="" loading="lazy">
+          </figure>
+          <div class="game-body">
+            <span class="no">No. 02</span>
+            <h3>Untitled ski game</h3>
+            <p class="pitch">Our next game, set on the slopes. Title and details to come.</p>
+            <ul class="meta"><li>VR</li></ul>
+            <div class="actions">
+              <span class="status">In development</span>
             </div>
           </div>
         </article>
@@ -347,7 +378,7 @@
 
 <footer class="foot">
   <div class="wrap">
-    <span>© 2026 metalemma</span>
+    <span>© 2026 MetaLemma</span>
     <span class="links">
       <span class="group"><em>MolCraft</em><a href="molcraft/privacy/">Privacy</a><a href="molcraft/terms/">Terms</a></span>
       <a href="mailto:metalemma.studio@proton.me">Contact</a>
