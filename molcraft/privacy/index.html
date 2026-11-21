@@ -16,53 +16,140 @@
 <link rel="preload" href="../../assets/outfit.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="../../assets/site.css">
 <style>
-  body {
-    background-color: var(--void);
-    background-image: radial-gradient(ellipse 70% 520px at 80% 0, rgba(20, 58, 108, 0.42), transparent 70%);
-    background-repeat: no-repeat;
+  /* ---------- header band ---------- */
+  .masthead {
+    position: relative; isolation: isolate; overflow: hidden;
+    padding: 150px 0 70px;
+    border-bottom: 1px solid var(--line);
+    background:
+      radial-gradient(ellipse 46% 80% at 80% 45%, rgba(0, 9, 30, 1), rgba(0, 8, 27, 0) 100%),
+      radial-gradient(ellipse 28% 50% at 80% 45%, rgba(28, 72, 130, .35), transparent);
   }
-  .doc-head { padding: 150px 0 0; position: relative; }
-  .doc-art {
-    position: absolute; z-index: -1; top: 70px; left: 800px;
-    width: 480px; opacity: .85;
-    -webkit-mask-image: radial-gradient(ellipse 50% 50% at 50% 50%, #000 66%, transparent 100%);
-            mask-image: radial-gradient(ellipse 50% 50% at 50% 50%, #000 66%, transparent 100%);
+  .masthead-art {
+    position: absolute; z-index: -1;
+    right: max(-60px, calc((100vw - 1440px) / 2)); top: 50%; transform: translateY(-46%);
+    width: min(48vw, 680px);
+    --fade: linear-gradient(90deg, transparent, #000 8%, #000 88%, transparent), linear-gradient(transparent, #000 14%, #000 86%, transparent);
+    -webkit-mask-image: var(--fade); -webkit-mask-composite: source-in;
+            mask-image: var(--fade); mask-composite: intersect;
   }
-  .doc-art img { width: 100%; height: auto; }
-  main { position: relative; z-index: 0; overflow: hidden; }
-  .doc-head .inner, .doc { max-width: 720px; }
-  .doc-head h1 {
-    margin: 22px 0 0;
-    font-size: clamp(40px, 6vw, 68px); line-height: 1.02; font-weight: 300; letter-spacing: -0.03em;
+  .masthead-art img { width: 100%; height: auto; }
+  .masthead .wrap { position: relative; }
+  .crumb {
+    display: inline-flex; align-items: center; gap: 10px;
+    color: var(--ink-2); text-decoration: none; font-size: 15px;
   }
-  .doc-head .meta { margin: 18px 0 0; font-family: var(--mono); font-size: 13px; color: var(--ink-3); letter-spacing: .04em; }
-  .doc-head .braid { margin: 44px 0 0; max-width: 720px; }
-  .doc { padding: 40px 0 120px; font-size: 18px; line-height: 1.7; color: var(--ink-2); }
-  .doc > p:first-child { font-size: 21px; line-height: 1.6; color: var(--ink); margin-top: 0; }
+  .crumb span { transition: transform .25s; }
+  .crumb:hover { color: var(--ink); }
+  .crumb:hover span { transform: translateX(-4px); }
+  .mh-mark { display: block; width: min(280px, 58vw); margin: 44px 0 0; }
+  .mh-mark svg { width: 100%; height: auto; overflow: visible; }
+  .masthead h1 {
+    margin: 30px 0 0; max-width: 620px;
+    font-size: clamp(42px, 6.2vw, 76px); line-height: 1; font-weight: 250; letter-spacing: -0.035em;
+  }
+  .masthead .meta {
+    margin: 26px 0 0;
+    display: inline-flex; align-items: center; gap: 10px;
+    padding: 8px 16px 8px 12px; border-radius: 999px;
+    border: 1px solid var(--line-strong);
+    background: rgba(111, 159, 224, .07);
+    font-size: 14px; color: var(--ink-2); letter-spacing: .01em;
+  }
+  .masthead .meta::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--coral); }
+
+  /* ---------- body: reading column + sidebar ---------- */
+  .layout {
+    display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 90px;
+    padding: 70px 0 120px;
+  }
+  .doc { max-width: 66ch; font-size: 18px; line-height: 1.75; color: var(--ink-2); counter-reset: sec; }
+  .doc .lead {
+    margin: 0 0 8px; padding: 0 0 34px;
+    font-size: 22px; line-height: 1.6; color: var(--ink); font-weight: 350;
+    border-bottom: 1px solid var(--line);
+  }
   .doc h2 {
-    margin: 56px 0 14px;
-    font-size: 24px; font-weight: 500; color: var(--ink); letter-spacing: -0.01em;
-    display: flex; align-items: center; gap: 14px;
+    counter-increment: sec;
+    margin: 54px 0 14px; scroll-margin-top: 30px;
+    font-size: 25px; line-height: 1.25; font-weight: 500; color: var(--ink); letter-spacing: -0.012em;
   }
   .doc h2::before {
-    content: ""; width: 9px; height: 9px; border-radius: 50%; flex: none;
-    background: radial-gradient(circle at 35% 30%, #ffb393 0, var(--coral) 40%, #8f3c20 100%);
+    content: counter(sec, decimal-leading-zero);
+    display: block; margin-bottom: 10px;
+    font-family: var(--mono); font-size: 12px; font-weight: 400; letter-spacing: .14em; color: var(--coral);
   }
   .doc p { margin: 0 0 18px; }
-  .doc ul { margin: 0 0 18px; padding: 0; list-style: none; }
+  .doc ul { margin: 6px 0 20px; padding: 0; list-style: none; display: grid; gap: 10px; }
   .doc li {
-    position: relative; padding: 16px 20px 16px 22px; margin: 0 0 10px;
+    position: relative; padding: 16px 20px 16px 46px;
     border: 1px solid var(--line); border-radius: 14px;
-    background: linear-gradient(170deg, rgba(14, 38, 72, 0.45), rgba(3, 8, 18, 0.6));
+    background: linear-gradient(170deg, rgba(14, 38, 72, .45), rgba(3, 8, 18, .6));
+  }
+  .doc li::before {
+    content: ""; position: absolute; left: 20px; top: 27px; width: 8px; height: 8px; border-radius: 50%;
+    background: var(--blue);
   }
   .doc a { color: var(--blue-soft); }
   .doc a:hover { color: var(--ink); }
-  @media (max-width: 1240px) { .doc-art { display: none; } }
+
+  .side { position: relative; }
+  .side-inner { position: sticky; top: 32px; display: grid; gap: 18px; }
+  .card {
+    border: 1px solid var(--line); border-radius: 18px; padding: 22px 22px 24px;
+    background: linear-gradient(170deg, rgba(14, 38, 72, .55), rgba(3, 8, 18, .85) 70%);
+  }
+  .card h3 {
+    margin: 0 0 14px; font-family: var(--mono); font-size: 11px; font-weight: 400;
+    letter-spacing: .16em; text-transform: uppercase; color: var(--ink-3);
+  }
+  .card dl { margin: 0; display: grid; gap: 14px; }
+  .card dt { font-size: 13px; color: var(--ink-3); }
+  .card dd { margin: 2px 0 0; font-size: 16px; color: var(--ink); }
+  .card dd a { color: var(--ink); text-decoration-color: var(--coral); word-break: break-all; }
+  .toc { list-style: none; margin: 0; padding: 0; display: grid; gap: 2px; counter-reset: t; }
+  .toc li { counter-increment: t; }
+  .toc a {
+    display: flex; gap: 12px; padding: 7px 0;
+    color: var(--ink-2); text-decoration: none; font-size: 15px; line-height: 1.35;
+  }
+  .toc a::before { content: counter(t, decimal-leading-zero); font-family: var(--mono); font-size: 11px; color: var(--ink-3); padding-top: 3px; }
+  .toc a:hover { color: var(--ink); }
+  .home-link {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 16px 22px; border-radius: 18px; border: 1px solid var(--line);
+    color: var(--ink); text-decoration: none; font-size: 15px;
+    transition: border-color .25s;
+  }
+  .home-link:hover { border-color: var(--coral); color: var(--ink); }
+  .home-link span { color: var(--coral); }
+
+  .doc-end { margin-top: 60px; }
+  .doc-end .braid { margin-bottom: 30px; }
+  .doc-end a { color: var(--ink-2); text-decoration: none; font-size: 16px; }
+  .doc-end { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px 24px; }
+  .doc-end .braid { flex-basis: 100%; }
+  .doc-end a:hover { color: var(--ink); }
+
+  @media (max-width: 980px) {
+    .layout { grid-template-columns: 1fr; gap: 0; padding-top: 40px; }
+    .side { order: -1; margin-bottom: 44px; }
+    .side-inner { position: static; grid-template-columns: 1fr 1fr; }
+    .side-inner .toc-card { grid-column: 1 / -1; }
+    .home-link.home { display: none; }
+    .masthead { padding: 120px 0 0; background: none; }
+    .masthead-art {
+      position: relative; right: auto; top: auto; transform: none;
+      width: 112vw; margin: 0 -6vw -4vw auto;
+    }
+    .masthead .wrap { padding-bottom: 0; }
+  }
   @media (max-width: 560px) {
-    .doc-head { padding-top: 120px; }
+    .side-inner { grid-template-columns: 1fr; }
     .doc { font-size: 17px; }
-    .doc > p:first-child { font-size: 19px; }
-    .doc h2 { margin-top: 44px; font-size: 21px; }
+    .doc .lead { font-size: 19px; }
+    .doc h2 { font-size: 22px; margin-top: 44px; }
+    .masthead h1 { font-size: 40px; }
   }
 </style>
 </head>
@@ -80,28 +167,46 @@
 </header>
 
 <main id="main">
-  <div class="wrap">
-    <header class="doc-head">
-      <div class="doc-art" aria-hidden="true"><img src="../../assets/molecule-900.webp" width="900" height="810" alt=""></div>
-      <div class="inner">
-        <span class="label">MolCraft · Privacy</span>
-        <h1>MolCraft Privacy Policy</h1>
-        <p class="meta">Effective 18 November 2026 · metalemma</p>
+  <header class="masthead">
+    <div class="wrap">
+      <a class="crumb" href="../../"><span aria-hidden="true">←</span> metalemma home</a>
+      <div class="mh-mark" aria-hidden="true">
+        <svg viewBox="73 -732 3865 742">
+          <defs>
+            <radialGradient id="atom" cx="0.36" cy="0.32" r="0.75">
+              <stop offset="0" stop-color="#ffc0a3"/><stop offset="0.28" stop-color="#e98159"/>
+              <stop offset="0.75" stop-color="#c25a35"/><stop offset="1" stop-color="#8a3a1f"/>
+            </radialGradient>
+          </defs>
+          <path fill="#eef1f6" d="M73.4 0V-701.8H163.2L450.3 -236.5H396.7L683.6 -701.8H773.4V0H645.9V-480.9L672.3 -473.7L467 -140.8H379.8L174.6 -473.7L200.9 -480.9V0Z M1424.9 0V-721.8H1547.8V0Z M1985.6 10.3Q1908.7 10.3 1843.3 -17.2Q1777.8 -44.7 1729.1 -94.3Q1680.3 -143.8 1653.8 -209.7Q1627.3 -275.5 1627.3 -351.1Q1627.3 -426.8 1653.8 -492.5Q1680.3 -558.3 1729 -607.3Q1777.7 -656.3 1843 -684.2Q1908.4 -712.1 1985.3 -712.1Q2070 -712.1 2133 -684.4Q2196.1 -656.7 2244.5 -609L2158.2 -522.6Q2128.3 -555.4 2085.3 -573.8Q2042.3 -592.2 1985.3 -592.2Q1935.1 -592.2 1893.5 -574.9Q1851.9 -557.7 1821.5 -525.5Q1791.2 -493.2 1774.7 -448.8Q1758.2 -404.4 1758.2 -351.1Q1758.2 -297.6 1774.7 -253.1Q1791.2 -208.7 1821.5 -176.5Q1851.9 -144.3 1893.5 -126.9Q1935.1 -109.6 1985.3 -109.6Q2046.4 -109.6 2089.5 -128.3Q2132.7 -147 2162.9 -179.9L2249.4 -93.5Q2200.6 -44.9 2135.5 -17.3Q2070.3 10.3 1985.6 10.3Z M2314.9 0V-481.8H2437.8V0ZM2437.8 -266.8 2391.9 -295.2Q2397.6 -384.5 2439.6 -438.2Q2481.6 -491.8 2562.7 -491.8Q2598.4 -491.8 2626.7 -479.6Q2655 -467.3 2678.5 -440.4L2600.8 -354.1Q2588.7 -367.2 2573.1 -373.1Q2557.4 -379 2536.9 -379Q2493.3 -379 2465.6 -351.7Q2437.8 -324.4 2437.8 -266.8Z M2897.5 10Q2831.9 10 2779.3 -23Q2726.7 -56 2696.3 -112.7Q2665.9 -169.3 2665.9 -240.1Q2665.9 -311.7 2696.3 -368.4Q2726.7 -425.1 2779.3 -458.5Q2831.9 -491.8 2897.5 -491.8Q2950.7 -491.8 2992.3 -469.7Q3033.9 -447.5 3058.8 -408.8Q3083.7 -370 3084.8 -320.7V-161.1Q3083.7 -111.8 3059.2 -73Q3034.7 -34.3 2992.7 -12.1Q2950.7 10 2897.5 10ZM2919.4 -104.2Q2976.8 -104.2 3012 -142.6Q3047.3 -181 3047.3 -240.9Q3047.3 -281.2 3031.3 -312Q3015.4 -342.8 2986.7 -360.2Q2958 -377.6 2919.6 -377.6Q2882 -377.6 2853.3 -360.2Q2824.6 -342.8 2808 -311.9Q2791.5 -281 2791.5 -240.9Q2791.5 -200.8 2808 -169.9Q2824.4 -139 2853.2 -121.6Q2882 -104.2 2919.4 -104.2ZM3040.4 0V-129.5L3060.6 -246.9L3040.4 -363.4V-481.8H3162.6V0Z M3327.7 0V-538.3Q3327.7 -594.7 3352.7 -638.3Q3377.7 -681.8 3422.7 -707Q3467.6 -732.1 3527.3 -732.1Q3573.1 -732.1 3606 -716.7Q3638.9 -701.2 3666.2 -672.9L3587.7 -594.4Q3576.4 -605.8 3562.9 -612.3Q3549.3 -618.7 3528.8 -618.7Q3491.4 -618.7 3471 -598.4Q3450.6 -578 3450.6 -540.5V0ZM3214.9 -372.8V-481.8H3594.1V-372.8Z M3701.7 0V-682.1H3824.6V0ZM3588.2 -372.8V-481.8H3938.1V-372.8Z"/>
+          <circle fill="url(#atom)" cx="1100.4" cy="-240.9" r="251.2"/>
+        </svg>
       </div>
-      <div class="braid" aria-hidden="true"></div>
-    </header>
-    <article class="doc">
-<p>MolCraft is a virtual-reality game for Meta Quest in which you build molecules from atoms. This
+      <h1>MolCraft Privacy Policy</h1>
+      <p class="meta">Effective 18 November 2026 · metalemma</p>
+    </div>
+    <div class="masthead-art" aria-hidden="true">
+      <picture>
+        <source type="image/webp" srcset="../../assets/molecule-900.webp 900w, ../../assets/molecule-1600.webp 1600w" sizes="(max-width: 980px) 112vw, 48vw">
+        <img src="../../assets/molecule-1100.jpg" width="1600" height="1440" alt="">
+      </picture>
+    </div>
+  </header>
+
+  <div class="wrap">
+    <div class="layout">
+      <article class="doc">
+<p class="lead">MolCraft is a virtual-reality game for Meta Quest in which you build molecules from atoms. This
 policy explains what information the game handles. In short: MolCraft has no accounts, no
 advertising and no analytics, and it does not collect personal information.</p>
 
-<h2>Information stored on your headset</h2>
+<h2 id="information-stored-on-your-headset">Information stored on your headset</h2>
 <p>The game saves your progress on the headset itself: the molecules in your world, DNA you have
 assembled, challenge progress, unlocked structures, your language choice and other settings, and a
 cache of compound names it has looked up. This data never leaves the device through MolCraft. You
 can erase it from the game's settings panel (the reset option) or by uninstalling the game.</p>
 
-<h2>Compound name lookup</h2>
+<h2 id="compound-name-lookup">Compound name lookup</h2>
 <p>When you build a structure whose name is not in the game's built-in list, MolCraft asks public
 chemistry databases for its name. The request contains only a standard chemical identifier of the
 structure (its InChIKey), and is sent to:</p>
@@ -115,23 +220,55 @@ structure (its InChIKey), and is sent to:</p>
 app making the request. MolCraft sends no other information about you or your device. If the
 headset is offline, the lookup simply does not happen and the game works as normal.</p>
 
-<h2>Meta platform</h2>
+<h2 id="meta-platform">Meta platform</h2>
 <p>MolCraft runs on Meta Horizon OS. When the game starts, it asks Meta's platform to confirm that
 your account owns the game. Controller and hand tracking are provided by the headset and used by the
 game only in real time to show and move your hands; MolCraft does not record or transmit them.
 Information Meta collects through its platform is governed by the
 <a href="https://www.meta.com/legal/privacy-policy/">Meta Privacy Policy</a>.</p>
 
-<h2>Children</h2>
+<h2 id="children">Children</h2>
 <p>MolCraft does not knowingly collect personal information from anyone, including children.</p>
 
-<h2>Changes</h2>
+<h2 id="changes">Changes</h2>
 <p>If the game's handling of information changes, this page will be updated and the effective date
 above changed.</p>
 
-<h2>Contact</h2>
+<h2 id="contact">Contact</h2>
 <p>Questions about this policy: <a href="mailto:metalemma.studio@proton.me">metalemma.studio@proton.me</a></p>
-    </article>
+        <div class="doc-end">
+          <div class="braid" aria-hidden="true"></div>
+          <a href="../../">← Back to metalemma</a>
+          <a class="xlink" href="../terms/">Terms of Service →</a>
+        </div>
+      </article>
+
+      <aside class="side" aria-label="Policy details">
+        <div class="side-inner">
+          <div class="card">
+            <h3>At a glance</h3>
+            <dl>
+              <div><dt>Effective</dt><dd>18 November 2026</dd></div>
+              <div><dt>Applies to</dt><dd>MolCraft for Meta Quest</dd></div>
+              <div><dt>Contact</dt><dd><a href="mailto:metalemma.studio@proton.me">metalemma.studio@proton.me</a></dd></div>
+            </dl>
+          </div>
+          <nav class="card toc-card" aria-label="Contents">
+            <h3>Contents</h3>
+            <ol class="toc">
+          <li><a href="#information-stored-on-your-headset">Information stored on your headset</a></li>
+          <li><a href="#compound-name-lookup">Compound name lookup</a></li>
+          <li><a href="#meta-platform">Meta platform</a></li>
+          <li><a href="#children">Children</a></li>
+          <li><a href="#changes">Changes</a></li>
+          <li><a href="#contact">Contact</a></li>
+            </ol>
+          </nav>
+          <a class="home-link" href="../terms/">Terms of Service <span aria-hidden="true">→</span></a>
+          <a class="home-link home" href="../../">metalemma home <span aria-hidden="true">→</span></a>
+        </div>
+      </aside>
+    </div>
   </div>
 </main>
 
@@ -139,7 +276,8 @@ above changed.</p>
   <div class="wrap">
     <span>© 2026 metalemma</span>
     <span class="links">
-      <a href="../../">metalemma.github.io</a>
+      <a href="../privacy/">Privacy</a>
+      <a href="../terms/">Terms</a>
       <a href="mailto:metalemma.studio@proton.me">Contact</a>
     </span>
   </div>
