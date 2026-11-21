@@ -1,0 +1,136 @@
+/* metalemma - shared styles. Static, no build step. */
+
+@font-face {
+  font-family: "Outfit";
+  src: url("outfit.woff2") format("woff2");
+  font-weight: 100 900;
+  font-display: swap;
+}
+
+:root {
+  color-scheme: dark;
+  --ink: #eef1f6;
+  --ink-2: #b4bfd1;
+  --ink-3: #8592a8;
+  --void: #02040a;
+  --navy: #061327;
+  --deep: #0b2547;
+  --blue: #6f9fe0;
+  --blue-soft: #a9c6f0;
+  --coral: #e0764d;
+  --coral-deep: #ca6842;
+  --line: rgba(169, 198, 240, 0.14);
+  --line-strong: rgba(169, 198, 240, 0.26);
+  --mono: ui-monospace, "SF Mono", "JetBrains Mono", Menlo, Consolas, monospace;
+  --gutter: clamp(20px, 5vw, 72px);
+  --max: 1240px;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  background: var(--void);
+  color: var(--ink);
+  font: 400 17px/1.6 "Outfit", system-ui, sans-serif;
+  font-feature-settings: "ss01";
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+  position: relative;
+}
+
+/* faint film grain over everything, like the render */
+body::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 100;
+  opacity: 0.05;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+img, svg { display: block; max-width: 100%; }
+
+a { color: var(--blue-soft); text-decoration-thickness: 1px; text-underline-offset: 3px; }
+a:hover { color: var(--ink); }
+:focus-visible { outline: 2px solid var(--coral); outline-offset: 3px; border-radius: 4px; }
+
+.skip {
+  position: absolute; left: 12px; top: -60px; z-index: 200;
+  background: var(--ink); color: var(--void); padding: 8px 14px; border-radius: 8px;
+}
+.skip:focus { top: 12px; }
+
+.wrap { max-width: var(--max); margin: 0 auto; padding: 0 var(--gutter); }
+
+/* ---------- top bar ---------- */
+
+.bar {
+  position: absolute; inset: 0 0 auto 0; z-index: 10;
+}
+.bar .wrap {
+  display: flex; align-items: center; justify-content: space-between;
+  height: 84px;
+}
+.studio-mark {
+  display: inline-flex; align-items: center; gap: 10px;
+  color: var(--ink); text-decoration: none;
+  font-weight: 500; font-size: 19px; letter-spacing: 0.01em;
+}
+.studio-mark .dot {
+  width: 11px; height: 11px; border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #ffb393 0, var(--coral) 38%, #8f3c20 100%);
+  box-shadow: 0 0 14px rgba(224, 118, 77, 0.55);
+}
+.bar nav { display: flex; gap: clamp(16px, 3vw, 34px); }
+.bar nav a {
+  color: var(--ink-2); text-decoration: none; font-size: 15px;
+}
+.bar nav a:hover { color: var(--ink); }
+
+/* ---------- label / eyebrow ---------- */
+
+.label {
+  font-family: var(--mono);
+  font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase;
+  color: var(--ink-3);
+  display: inline-flex; align-items: center; gap: 12px;
+}
+.label::before {
+  content: ""; width: 26px; height: 1px; background: currentColor; opacity: 0.6;
+}
+
+/* ---------- braid (the key art's electron pair: a coral and a blue strand) ---------- */
+
+.braid {
+  height: 28px;
+  background: url("braid.svg") repeat-x 0 50% / 72px 28px;
+  animation: braid-drift 5s linear infinite;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 18%, #000 82%, transparent);
+          mask-image: linear-gradient(90deg, transparent, #000 18%, #000 82%, transparent);
+}
+@keyframes braid-drift { to { background-position: 72px 50%; } }
+
+/* ---------- footer ---------- */
+
+.foot {
+  border-top: 1px solid var(--line);
+  padding: 34px 0 44px;
+  color: var(--ink-3);
+  font-size: 14px;
+}
+.foot .wrap {
+  display: flex; flex-wrap: wrap; gap: 14px 28px; align-items: center; justify-content: space-between;
+}
+.foot a { color: var(--ink-2); text-decoration: none; }
+.foot a:hover { color: var(--ink); }
+.foot .links { display: flex; flex-wrap: wrap; gap: 24px; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+  html { scroll-behavior: auto; }
+  .js .reveal { opacity: 1 !important; transform: none !important; }
+}

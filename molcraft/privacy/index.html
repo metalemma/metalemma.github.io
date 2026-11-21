@@ -9,19 +9,88 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>MolCraft Privacy Policy</title>
+<meta name="description" content="What information MolCraft, a VR game for Meta Quest by metalemma, handles.">
+<meta name="theme-color" content="#02040a">
+<link rel="icon" type="image/png" href="../../assets/favicon.png">
+<link rel="apple-touch-icon" href="../../assets/apple-touch-icon.png">
+<link rel="preload" href="../../assets/outfit.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="../../assets/site.css">
 <style>
-  body { font: 16px/1.6 -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; max-width: 720px;
-         margin: 40px auto; padding: 0 16px; color: #1d1d1f; background: #fff; }
-  h1 { font-size: 28px; margin-bottom: 4px; }
-  h2 { font-size: 19px; margin-top: 32px; }
-  .meta { color: #666; font-size: 14px; }
-  @media (prefers-color-scheme: dark) { body { color: #e8e8ea; background: #121214; } .meta { color: #999; } a { color: #8ab4ff; } }
+  body {
+    background-color: var(--void);
+    background-image: radial-gradient(ellipse 70% 520px at 80% 0, rgba(20, 58, 108, 0.42), transparent 70%);
+    background-repeat: no-repeat;
+  }
+  .doc-head { padding: 150px 0 0; position: relative; }
+  .doc-art {
+    position: absolute; z-index: -1; top: 70px; left: 800px;
+    width: 480px; opacity: .85;
+    -webkit-mask-image: radial-gradient(ellipse 50% 50% at 50% 50%, #000 66%, transparent 100%);
+            mask-image: radial-gradient(ellipse 50% 50% at 50% 50%, #000 66%, transparent 100%);
+  }
+  .doc-art img { width: 100%; height: auto; }
+  main { position: relative; z-index: 0; overflow: hidden; }
+  .doc-head .inner, .doc { max-width: 720px; }
+  .doc-head h1 {
+    margin: 22px 0 0;
+    font-size: clamp(40px, 6vw, 68px); line-height: 1.02; font-weight: 300; letter-spacing: -0.03em;
+  }
+  .doc-head .meta { margin: 18px 0 0; font-family: var(--mono); font-size: 13px; color: var(--ink-3); letter-spacing: .04em; }
+  .doc-head .braid { margin: 44px 0 0; max-width: 720px; }
+  .doc { padding: 40px 0 120px; font-size: 18px; line-height: 1.7; color: var(--ink-2); }
+  .doc > p:first-child { font-size: 21px; line-height: 1.6; color: var(--ink); margin-top: 0; }
+  .doc h2 {
+    margin: 56px 0 14px;
+    font-size: 24px; font-weight: 500; color: var(--ink); letter-spacing: -0.01em;
+    display: flex; align-items: center; gap: 14px;
+  }
+  .doc h2::before {
+    content: ""; width: 9px; height: 9px; border-radius: 50%; flex: none;
+    background: radial-gradient(circle at 35% 30%, #ffb393 0, var(--coral) 40%, #8f3c20 100%);
+  }
+  .doc p { margin: 0 0 18px; }
+  .doc ul { margin: 0 0 18px; padding: 0; list-style: none; }
+  .doc li {
+    position: relative; padding: 16px 20px 16px 22px; margin: 0 0 10px;
+    border: 1px solid var(--line); border-radius: 14px;
+    background: linear-gradient(170deg, rgba(14, 38, 72, 0.45), rgba(3, 8, 18, 0.6));
+  }
+  .doc a { color: var(--blue-soft); }
+  .doc a:hover { color: var(--ink); }
+  @media (max-width: 1240px) { .doc-art { display: none; } }
+  @media (max-width: 560px) {
+    .doc-head { padding-top: 120px; }
+    .doc { font-size: 17px; }
+    .doc > p:first-child { font-size: 19px; }
+    .doc h2 { margin-top: 44px; font-size: 21px; }
+  }
 </style>
 </head>
 <body>
-<h1>MolCraft Privacy Policy</h1>
-<p class="meta">Effective 18 November 2026 · metalemma</p>
+<a class="skip" href="#main">Skip to content</a>
 
+<header class="bar">
+  <div class="wrap">
+    <a class="studio-mark" href="../../" aria-label="metalemma home"><span class="dot" aria-hidden="true"></span>metalemma</a>
+    <nav aria-label="Site">
+      <a href="../../#molcraft">MolCraft</a>
+      <a href="mailto:metalemma.studio@proton.me">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+  <div class="wrap">
+    <header class="doc-head">
+      <div class="doc-art" aria-hidden="true"><img src="../../assets/molecule-900.webp" width="900" height="810" alt=""></div>
+      <div class="inner">
+        <span class="label">MolCraft · Privacy</span>
+        <h1>MolCraft Privacy Policy</h1>
+        <p class="meta">Effective 18 November 2026 · metalemma</p>
+      </div>
+      <div class="braid" aria-hidden="true"></div>
+    </header>
+    <article class="doc">
 <p>MolCraft is a virtual-reality game for Meta Quest in which you build molecules from atoms. This
 policy explains what information the game handles. In short: MolCraft has no accounts, no
 advertising and no analytics, and it does not collect personal information.</p>
@@ -62,5 +131,18 @@ above changed.</p>
 
 <h2>Contact</h2>
 <p>Questions about this policy: <a href="mailto:metalemma.studio@proton.me">metalemma.studio@proton.me</a></p>
+    </article>
+  </div>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <span>© 2026 metalemma</span>
+    <span class="links">
+      <a href="../../">metalemma.github.io</a>
+      <a href="mailto:metalemma.studio@proton.me">Contact</a>
+    </span>
+  </div>
+</footer>
 </body>
 </html>

@@ -3,17 +3,539 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>metalemma</title>
+<title>metalemma — MolCraft, molecules built by hand in VR</title>
+<meta name="description" content="metalemma is an independent studio. Its game MolCraft lets you build molecules atom by atom in virtual reality on Meta Quest.">
+<meta name="theme-color" content="#02040a">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="metalemma">
+<meta property="og:title" content="MolCraft — build molecules atom by atom in VR">
+<meta property="og:description" content="A VR molecule-building game for Meta Quest, from metalemma.">
+<meta property="og:image" content="https://metalemma.github.io/assets/og.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" type="image/png" href="assets/favicon.png">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<link rel="preload" href="assets/outfit.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="assets/site.css">
 <style>
-  body { font: 16px/1.6 -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; max-width: 720px;
-         margin: 40px auto; padding: 0 16px; color: #1d1d1f; background: #fff; }
-  @media (prefers-color-scheme: dark) { body { color: #e8e8ea; background: #121214; } a { color: #8ab4ff; } }
+  /* ---------- hero ---------- */
+  .hero {
+    position: relative;
+    min-height: min(100svh, 980px);
+    display: flex; align-items: center;
+    isolation: isolate;
+    overflow: hidden;
+  }
+  .hero::before { /* the blue pool of light behind the molecule */
+    content: ""; position: absolute; z-index: -2;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 48% 62% at 74% 50%, rgba(0, 9, 30, 1) 0, rgba(0, 8, 27, 0.92) 50%, rgba(0, 8, 27, 0) 100%),
+      radial-gradient(ellipse 30% 40% at 76% 50%, rgba(28, 72, 130, 0.35), transparent);
+  }
+  .hero-art {
+    position: absolute; z-index: -1;
+    right: max(-5vw, calc((100vw - 1560px) / 2));
+    top: 50%;
+    width: min(58vw, 920px);
+    transform: translateY(-50%);
+    --fade: linear-gradient(90deg, transparent, #000 6%, #000 86%, transparent), linear-gradient(transparent, #000 16%, #000 84%, transparent);
+    -webkit-mask-image: var(--fade); -webkit-mask-composite: source-in;
+            mask-image: var(--fade); mask-composite: intersect;
+    animation: hover 11s ease-in-out infinite;
+  }
+  .hero-art img { width: 100%; height: auto; }
+  @keyframes hover {
+    0%, 100% { transform: translateY(-50%) rotate(0deg); }
+    50% { transform: translateY(calc(-50% - 12px)) rotate(-0.6deg); }
+  }
+  .hero .wrap { width: 100%; padding-top: 110px; padding-bottom: 90px; }
+  .hero-copy { max-width: 520px; }
+  .hero .label { animation: rise .9s .1s both cubic-bezier(.2,.7,.2,1); }
+  .wordmark {
+    margin: 26px 0 0;
+    width: min(100%, 470px);
+    animation: rise 1s .2s both cubic-bezier(.2,.7,.2,1);
+  }
+  .wordmark svg { width: 100%; height: auto; overflow: visible; }
+  .tagline {
+    margin: 30px 0 0;
+    font-size: clamp(26px, 3.1vw, 38px);
+    line-height: 1.15; font-weight: 300; letter-spacing: -0.01em;
+    animation: rise 1s .32s both cubic-bezier(.2,.7,.2,1);
+  }
+  .tagline em { font-style: normal; color: var(--coral); font-weight: 400; }
+  .pitch {
+    margin: 20px 0 0; max-width: 460px;
+    color: var(--ink-2); font-size: 18px;
+    animation: rise 1s .44s both cubic-bezier(.2,.7,.2,1);
+  }
+  .cta {
+    margin-top: 38px; display: flex; flex-wrap: wrap; align-items: center; gap: 14px 24px;
+    animation: rise 1s .56s both cubic-bezier(.2,.7,.2,1);
+  }
+  /* Not a link until the store page is live. To link it, change the span to
+     <a class="store" href="https://www.meta.com/experiences/..."> and drop aria-disabled. */
+  .store {
+    display: inline-flex; align-items: center; gap: 14px;
+    padding: 12px 22px 12px 14px;
+    border: 1px solid var(--line-strong);
+    border-radius: 999px;
+    background: linear-gradient(180deg, rgba(111, 159, 224, 0.10), rgba(111, 159, 224, 0.03));
+    color: var(--ink); text-decoration: none;
+    backdrop-filter: blur(6px);
+  }
+  .store .glyph {
+    width: 34px; height: 34px; border-radius: 50%;
+    display: grid; place-items: center;
+    background: rgba(224, 118, 77, 0.14);
+    border: 1px solid rgba(224, 118, 77, 0.45);
+  }
+  .store .glyph i {
+    width: 8px; height: 8px; border-radius: 50%; background: var(--coral);
+    box-shadow: 0 0 0 0 rgba(224, 118, 77, 0.6);
+    animation: ping 2.4s ease-out infinite;
+  }
+  @keyframes ping { 70%, 100% { box-shadow: 0 0 0 9px rgba(224, 118, 77, 0); } }
+  .store small { display: block; font-size: 12px; color: var(--ink-3); letter-spacing: 0.04em; line-height: 1.3; }
+  .store b { display: block; font-weight: 500; font-size: 16px; line-height: 1.3; }
+  .cta .more { color: var(--ink-2); text-decoration: none; font-size: 15px; }
+  .cta .more:hover { color: var(--ink); }
+  .cta .more span { display: inline-block; transition: transform .25s; }
+  .cta .more:hover span { transform: translateY(3px); }
+
+  @keyframes rise { from { opacity: 0; transform: translateY(14px); } }
+
+  .scroll-cue {
+    position: absolute; left: 50%; bottom: 26px; transform: translateX(-50%);
+    width: 1px; height: 46px;
+    background: linear-gradient(var(--ink-3), transparent);
+    opacity: .6;
+  }
+
+  /* ---------- sections ---------- */
+  section { position: relative; }
+  .sec { padding: clamp(80px, 11vw, 150px) 0; }
+  .sec-head { display: grid; gap: 22px; max-width: 760px; }
+  .sec-head h2 {
+    margin: 0;
+    font-size: clamp(34px, 4.6vw, 58px);
+    line-height: 1.04; font-weight: 300; letter-spacing: -0.025em;
+  }
+  .sec-head h2 strong { font-weight: 500; }
+  .sec-head p { margin: 0; color: var(--ink-2); font-size: 19px; max-width: 600px; }
+
+  /* ---------- the three steps ---------- */
+  .steps {
+    margin-top: clamp(48px, 7vw, 84px);
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    border-top: 1px solid var(--line);
+  }
+  .step {
+    padding: 34px 34px 10px 0;
+    position: relative;
+  }
+  .step + .step { padding-left: 34px; border-left: 1px solid var(--line); }
+  .step .n {
+    font-family: var(--mono); font-size: 12px; color: var(--coral); letter-spacing: .12em;
+  }
+  .step figure { margin: 26px 0 28px; height: 150px; display: grid; place-items: center start; }
+  .step figure svg { height: 150px; width: auto; max-width: 100%; overflow: visible; }
+  .step h3 { margin: 0 0 10px; font-size: 23px; font-weight: 500; letter-spacing: -0.01em; }
+  .step p { margin: 0; color: var(--ink-2); }
+
+  /* ---------- numbers ---------- */
+  .numbers {
+    background:
+      radial-gradient(ellipse 60% 80% at 80% 50%, rgba(20, 58, 108, 0.45), transparent 70%),
+      linear-gradient(180deg, var(--void), var(--navy) 50%, var(--void));
+  }
+  .numbers .wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 64px 40px; align-items: start; }
+  .numbers .sec-head { grid-column: 1 / -1; }
+  .num { border-left: 1px solid var(--line-strong); padding-left: 26px; }
+  .num .big {
+    display: block;
+    font-size: clamp(64px, 8.4vw, 120px);
+    line-height: .9; font-weight: 200; letter-spacing: -0.045em;
+    background: linear-gradient(180deg, #fff 30%, var(--blue-soft));
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  .num .big sup { font-size: .45em; vertical-align: .85em; color: var(--coral); -webkit-text-fill-color: var(--coral); font-weight: 300; margin-left: .04em; }
+  .num p { margin: 20px 0 0; color: var(--ink-2); max-width: 320px; font-size: 18px; }
+
+  /* ---------- modes ---------- */
+  .modes {
+    margin-top: clamp(48px, 7vw, 84px);
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;
+  }
+  .mode {
+    position: relative; overflow: hidden;
+    border: 1px solid var(--line);
+    border-radius: 22px;
+    padding: 30px 30px 34px;
+    min-height: 330px;
+    display: flex; flex-direction: column; justify-content: flex-end;
+    background: linear-gradient(170deg, rgba(14, 38, 72, 0.7), rgba(3, 8, 18, 0.9) 70%);
+    transition: border-color .3s, transform .4s cubic-bezier(.2,.7,.2,1);
+  }
+  .mode:hover { border-color: var(--line-strong); transform: translateY(-4px); }
+  .mode::before { /* rim light, as in the render */
+    content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none;
+    background: radial-gradient(120% 60% at 50% -10%, rgba(169, 198, 240, 0.16), transparent 60%);
+  }
+  .mode .tag { position: absolute; top: 26px; left: 30px; font-family: var(--mono); font-size: 12px; color: var(--ink-3); letter-spacing: .12em; }
+  .mode svg { position: absolute; top: 34px; right: 26px; width: 150px; height: 150px; }
+  .mode h3 { margin: 0 0 10px; font-size: 30px; font-weight: 400; letter-spacing: -0.015em; }
+  .mode p { margin: 0; color: var(--ink-2); }
+
+  /* ---------- details ---------- */
+  .details { margin-top: clamp(48px, 7vw, 84px); display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; border-top: 1px solid var(--line); }
+  .detail { padding: 30px 30px 0 0; }
+  .detail + .detail { padding-left: 30px; border-left: 1px solid var(--line); }
+  .detail h3 { margin: 0 0 10px; font-size: 20px; font-weight: 500; }
+  .detail p { margin: 0; color: var(--ink-2); }
+  .detail .k { display: block; font-family: var(--mono); font-size: 12px; color: var(--blue); letter-spacing: .12em; margin-bottom: 16px; }
+
+  /* ---------- facts strip ---------- */
+  .facts {
+    border-top: 1px solid var(--line);
+    padding: 26px 0 30px;
+  }
+  .facts ul {
+    list-style: none; margin: 0; padding: 0;
+    display: flex; flex-wrap: wrap; justify-content: space-between; gap: 14px 30px;
+    font-size: 16px; color: var(--ink-2);
+  }
+  .facts li { display: inline-flex; align-items: center; gap: 11px; }
+  .facts li::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--coral); }
+  .facts li:nth-child(even)::before { background: var(--blue); }
+
+  /* ---------- studio ---------- */
+  .studio .wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: end; }
+  .studio .studio-name {
+    margin: 22px 0 0;
+    font-size: clamp(56px, 10vw, 148px); line-height: .9; font-weight: 200; letter-spacing: -0.05em;
+  }
+  .studio .studio-name span { color: var(--coral); }
+  .studio p.lede { margin: 0 0 22px; color: var(--ink-2); font-size: 19px; max-width: 470px; }
+  .mail {
+    display: inline-flex; align-items: center; gap: 12px;
+    font-size: clamp(18px, 2vw, 22px); color: var(--ink); text-decoration: none;
+    border-bottom: 1px solid var(--line-strong); padding-bottom: 6px;
+  }
+  .mail:hover { border-color: var(--coral); color: var(--ink); }
+  .mail span { color: var(--coral); transition: transform .25s; }
+  .mail:hover span { transform: translateX(4px); }
+
+  /* ---------- reveal on scroll ---------- */
+  .js .reveal { opacity: 0; transform: translateY(22px); transition: opacity .9s cubic-bezier(.2,.7,.2,1), transform .9s cubic-bezier(.2,.7,.2,1); }
+  .js .reveal.in { opacity: 1; transform: none; }
+
+  /* ---------- small screens ---------- */
+  @media (max-width: 1200px) and (min-width: 901px) {
+    .hero-art { width: 52vw; right: -2vw; }
+    .hero-copy { max-width: 46vw; }
+    .wordmark { width: min(100%, 400px); }
+  }
+  @media (max-width: 900px) {
+    .hero { min-height: auto; display: block; }
+    .hero::before { background: radial-gradient(ellipse 90% 34% at 50% 22%, rgba(0, 8, 27, 1), rgba(0, 8, 27, 0)); }
+    .hero-art {
+      position: relative; right: auto; top: auto;
+      width: 118vw; margin: 70px -9vw -10vw; transform: none;
+      animation-name: hover-m;
+    }
+    @keyframes hover-m { 50% { transform: translateY(-8px); } }
+    .hero .wrap { padding-top: 0; padding-bottom: 72px; }
+    .scroll-cue { display: none; }
+    .steps, .details { grid-template-columns: 1fr; }
+    .step, .step + .step, .detail, .detail + .detail { padding: 30px 0; border-left: 0; }
+    .step + .step, .detail + .detail { border-top: 1px solid var(--line); }
+    .step figure { height: 120px; margin: 18px 0 20px; }
+    .step figure svg { height: 120px; }
+    .modes { grid-template-columns: 1fr; }
+    .mode { min-height: 280px; }
+    .studio .wrap { grid-template-columns: 1fr; gap: 30px; }
+  }
+  @media (max-width: 560px) {
+    body { font-size: 16px; }
+    .bar nav a.opt { display: none; }
+    .numbers .wrap { grid-template-columns: 1fr; gap: 34px; }
+    .facts ul { justify-content: flex-start; }
+    .sec-head p, .studio p.lede { font-size: 17px; }
+  }
 </style>
 </head>
 <body>
-<h1>metalemma</h1>
-<p><strong>MolCraft</strong> - build molecules from atoms in VR, for Meta Quest.
-<a href="molcraft/privacy/">Privacy policy</a></p>
-<p>Contact: <a href="mailto:metalemma.studio@proton.me">metalemma.studio@proton.me</a></p>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="bar">
+  <div class="wrap">
+    <a class="studio-mark" href="./" aria-label="metalemma home"><span class="dot" aria-hidden="true"></span>metalemma</a>
+    <nav aria-label="Site">
+      <a class="opt" href="#molcraft">MolCraft</a>
+      <a class="opt" href="#modes">Modes</a>
+      <a href="molcraft/privacy/">Privacy</a>
+      <a href="#studio">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+
+  <section class="hero" aria-labelledby="molcraft-title">
+    <div class="hero-art" aria-hidden="true">
+      <picture>
+        <source type="image/webp" srcset="assets/molecule-900.webp 900w, assets/molecule-1600.webp 1600w" sizes="(max-width: 900px) 118vw, 58vw">
+        <img src="assets/molecule-1100.jpg" width="1600" height="1440" alt="" fetchpriority="high">
+      </picture>
+    </div>
+    <div class="wrap">
+      <div class="hero-copy">
+        <span class="label">A VR game for Meta Quest</span>
+        <h1 class="wordmark" id="molcraft-title">
+          <svg viewBox="73 -732 3865 742" role="img" aria-label="MolCraft">
+            <defs>
+              <radialGradient id="atom" cx="0.36" cy="0.32" r="0.75">
+                <stop offset="0" stop-color="#ffc0a3"/>
+                <stop offset="0.28" stop-color="#e98159"/>
+                <stop offset="0.75" stop-color="#c25a35"/>
+                <stop offset="1" stop-color="#8a3a1f"/>
+              </radialGradient>
+            </defs>
+            <path fill="#eef1f6" d="M73.4 0V-701.8H163.2L450.3 -236.5H396.7L683.6 -701.8H773.4V0H645.9V-480.9L672.3 -473.7L467 -140.8H379.8L174.6 -473.7L200.9 -480.9V0Z M1424.9 0V-721.8H1547.8V0Z M1985.6 10.3Q1908.7 10.3 1843.3 -17.2Q1777.8 -44.7 1729.1 -94.3Q1680.3 -143.8 1653.8 -209.7Q1627.3 -275.5 1627.3 -351.1Q1627.3 -426.8 1653.8 -492.5Q1680.3 -558.3 1729 -607.3Q1777.7 -656.3 1843 -684.2Q1908.4 -712.1 1985.3 -712.1Q2070 -712.1 2133 -684.4Q2196.1 -656.7 2244.5 -609L2158.2 -522.6Q2128.3 -555.4 2085.3 -573.8Q2042.3 -592.2 1985.3 -592.2Q1935.1 -592.2 1893.5 -574.9Q1851.9 -557.7 1821.5 -525.5Q1791.2 -493.2 1774.7 -448.8Q1758.2 -404.4 1758.2 -351.1Q1758.2 -297.6 1774.7 -253.1Q1791.2 -208.7 1821.5 -176.5Q1851.9 -144.3 1893.5 -126.9Q1935.1 -109.6 1985.3 -109.6Q2046.4 -109.6 2089.5 -128.3Q2132.7 -147 2162.9 -179.9L2249.4 -93.5Q2200.6 -44.9 2135.5 -17.3Q2070.3 10.3 1985.6 10.3Z M2314.9 0V-481.8H2437.8V0ZM2437.8 -266.8 2391.9 -295.2Q2397.6 -384.5 2439.6 -438.2Q2481.6 -491.8 2562.7 -491.8Q2598.4 -491.8 2626.7 -479.6Q2655 -467.3 2678.5 -440.4L2600.8 -354.1Q2588.7 -367.2 2573.1 -373.1Q2557.4 -379 2536.9 -379Q2493.3 -379 2465.6 -351.7Q2437.8 -324.4 2437.8 -266.8Z M2897.5 10Q2831.9 10 2779.3 -23Q2726.7 -56 2696.3 -112.7Q2665.9 -169.3 2665.9 -240.1Q2665.9 -311.7 2696.3 -368.4Q2726.7 -425.1 2779.3 -458.5Q2831.9 -491.8 2897.5 -491.8Q2950.7 -491.8 2992.3 -469.7Q3033.9 -447.5 3058.8 -408.8Q3083.7 -370 3084.8 -320.7V-161.1Q3083.7 -111.8 3059.2 -73Q3034.7 -34.3 2992.7 -12.1Q2950.7 10 2897.5 10ZM2919.4 -104.2Q2976.8 -104.2 3012 -142.6Q3047.3 -181 3047.3 -240.9Q3047.3 -281.2 3031.3 -312Q3015.4 -342.8 2986.7 -360.2Q2958 -377.6 2919.6 -377.6Q2882 -377.6 2853.3 -360.2Q2824.6 -342.8 2808 -311.9Q2791.5 -281 2791.5 -240.9Q2791.5 -200.8 2808 -169.9Q2824.4 -139 2853.2 -121.6Q2882 -104.2 2919.4 -104.2ZM3040.4 0V-129.5L3060.6 -246.9L3040.4 -363.4V-481.8H3162.6V0Z M3327.7 0V-538.3Q3327.7 -594.7 3352.7 -638.3Q3377.7 -681.8 3422.7 -707Q3467.6 -732.1 3527.3 -732.1Q3573.1 -732.1 3606 -716.7Q3638.9 -701.2 3666.2 -672.9L3587.7 -594.4Q3576.4 -605.8 3562.9 -612.3Q3549.3 -618.7 3528.8 -618.7Q3491.4 -618.7 3471 -598.4Q3450.6 -578 3450.6 -540.5V0ZM3214.9 -372.8V-481.8H3594.1V-372.8Z M3701.7 0V-682.1H3824.6V0ZM3588.2 -372.8V-481.8H3938.1V-372.8Z"/>
+            <circle fill="url(#atom)" cx="1100.4" cy="-240.9" r="251.2"/>
+          </svg>
+        </h1>
+        <p class="tagline">Build molecules <em>atom by atom</em>, in the room around you.</p>
+        <p class="pitch">Pick up atoms in virtual reality and bond them into real compounds. Every finished structure is identified by name, from water to rings you'd only meet in a textbook.</p>
+        <div class="cta">
+          <span class="store" aria-disabled="true">
+            <span class="glyph" aria-hidden="true"><i></i></span>
+            <span><small>Coming soon</small><b>Meta Horizon Store</b></span>
+          </span>
+          <a class="more" href="#molcraft">How it plays <span aria-hidden="true">↓</span></a>
+        </div>
+      </div>
+    </div>
+    <div class="scroll-cue" aria-hidden="true"></div>
+  </section>
+
+  <section class="sec" id="molcraft" aria-labelledby="how-title">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <span class="label">How it plays</span>
+        <h2 id="how-title">Chemistry you can <strong>hold</strong>.</h2>
+        <p>No menus of formulas to memorise. You reach out, take an atom, and bring it to another. If the bond can exist, it forms.</p>
+      </div>
+
+      <div class="steps">
+        <article class="step reveal">
+          <span class="n">01</span>
+          <figure aria-hidden="true">
+            <svg viewBox="-6 0 246 150">
+              <defs>
+                <radialGradient id="g-coral" cx=".36" cy=".32" r=".75"><stop offset="0" stop-color="#ffc0a3"/><stop offset=".3" stop-color="#e98159"/><stop offset=".78" stop-color="#b9532f"/><stop offset="1" stop-color="#7a321a"/></radialGradient>
+                <radialGradient id="g-metal" cx=".36" cy=".3" r=".78"><stop offset="0" stop-color="#9aa3b1"/><stop offset=".25" stop-color="#4a515c"/><stop offset=".8" stop-color="#20252d"/><stop offset="1" stop-color="#14181e"/></radialGradient>
+                <radialGradient id="g-h" cx=".36" cy=".3" r=".78"><stop offset="0" stop-color="#ffffff"/><stop offset=".35" stop-color="#d4d9e1"/><stop offset="1" stop-color="#7d8592"/></radialGradient>
+                <linearGradient id="g-bond" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#c5ccd6"/><stop offset=".5" stop-color="#7c8592"/><stop offset="1" stop-color="#3a4049"/></linearGradient>
+              </defs>
+              <circle cx="66" cy="75" r="38" fill="url(#g-coral)"/>
+              <circle cx="66" cy="75" r="54" fill="none" stroke="#a9c6f0" stroke-opacity=".4" stroke-dasharray="2 8" stroke-linecap="round">
+                <animateTransform attributeName="transform" type="rotate" from="0 66 75" to="360 66 75" dur="40s" repeatCount="indefinite"/>
+              </circle>
+              <circle cx="66" cy="75" r="70" fill="none" stroke="#a9c6f0" stroke-opacity=".12"/>
+              <g font-family="ui-monospace, Menlo, monospace" font-size="11" fill="#8592a8" letter-spacing="1.5">
+                <text x="160" y="56">CARBON</text>
+                <text x="160" y="78">VALENCE 4</text>
+                <text x="160" y="100" fill="#e0764d">4 FREE</text>
+              </g>
+              <line x1="124" y1="75" x2="150" y2="75" stroke="#8592a8" stroke-opacity=".5"/>
+            </svg>
+          </figure>
+          <h3>Take an atom</h3>
+          <p>Aim at one in the tray and pull the trigger. Every atom knows how many more bonds it can make.</p>
+        </article>
+
+        <article class="step reveal">
+          <span class="n">02</span>
+          <figure aria-hidden="true">
+            <svg viewBox="0 0 240 150">
+              <circle cx="48" cy="75" r="36" fill="url(#g-coral)"/>
+              <circle cx="192" cy="75" r="36" fill="url(#g-metal)"/>
+              <g fill="none" stroke-width="2" stroke-linecap="round">
+                <path id="strand-a" stroke="#e0764d" d="M84 75 C 92 63, 100 63, 108 75 S 124 87, 132 75 S 148 63, 156 75"/>
+                <path stroke="#6f9fe0" d="M84 75 C 92 87, 100 87, 108 75 S 124 63, 132 75 S 148 87, 156 75"/>
+              </g>
+            </svg>
+          </figure>
+          <h3>Bond by valence</h3>
+          <p>Two atoms join when both have room for another bond. That is the only rule, so anything chemistry allows, you can build.</p>
+        </article>
+
+        <article class="step reveal">
+          <span class="n">03</span>
+          <figure aria-hidden="true">
+            <svg viewBox="0 0 250 150">
+              <g>
+                <g stroke-linecap="round"><line x1="74" y1="58" x2="36" y2="100" stroke="#5d6573" stroke-width="9"/><line x1="74" y1="58" x2="112" y2="100" stroke="#5d6573" stroke-width="9"/>
+                <line x1="72" y1="56" x2="34" y2="98" stroke="#aab2bd" stroke-width="3" stroke-opacity=".7"/><line x1="76" y1="56" x2="114" y2="98" stroke="#aab2bd" stroke-width="3" stroke-opacity=".7"/></g>
+                <circle cx="74" cy="58" r="26" fill="url(#g-coral)"/>
+                <circle cx="36" cy="100" r="17" fill="url(#g-h)"/>
+                <circle cx="112" cy="100" r="17" fill="url(#g-h)"/>
+              </g>
+              <g>
+                <rect x="146" y="44" width="96" height="44" rx="22" fill="rgba(111,159,224,.10)" stroke="rgba(169,198,240,.35)"/>
+                <text x="194" y="64" text-anchor="middle" font-family="Outfit, sans-serif" font-size="15" fill="#eef1f6">Water</text>
+                <text x="194" y="80" text-anchor="middle" font-family="Outfit, sans-serif" font-size="12" fill="#8592a8" letter-spacing="1">H₂O</text>
+              </g>
+            </svg>
+          </figure>
+          <h3>See what you made</h3>
+          <p>Finish a structure and the game names it, from its built-in library or, when you're online, PubChem.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec numbers" aria-labelledby="num-title">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <span class="label">Identification</span>
+        <h2 id="num-title">It knows what you <strong>built</strong>.</h2>
+        <p>Structures are matched by their InChIKey, the standard chemical fingerprint, against a built-in library and, when you're online, PubChem.</p>
+      </div>
+      <div class="num reveal">
+        <span class="big">10,000<sup>+</sup></span>
+        <p>compounds recognised on the headset, with no connection needed.</p>
+      </div>
+      <div class="num reveal">
+        <span class="big">100M<sup>+</sup></span>
+        <p>more looked up online in PubChem, the public chemistry database.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec" id="modes" aria-labelledby="modes-title">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <span class="label">Three ways to play</span>
+        <h2 id="modes-title">Learn it. Then <strong>make anything</strong>.</h2>
+      </div>
+      <div class="modes">
+        <article class="mode reveal">
+          <span class="tag">I</span>
+          <svg viewBox="0 0 150 150" aria-hidden="true">
+            <circle cx="75" cy="75" r="22" fill="url(#g-coral)"/>
+            <circle cx="75" cy="75" r="44" fill="none" stroke="#a9c6f0" stroke-opacity=".28"/>
+            <circle cx="75" cy="75" r="66" fill="none" stroke="#a9c6f0" stroke-opacity=".14"/>
+            <circle cx="119" cy="75" r="4" fill="#a9c6f0"/>
+            <circle cx="28" cy="98" r="4" fill="#a9c6f0" opacity=".6"/>
+          </svg>
+          <h3>Learn</h3>
+          <p>A guided start. Step by step it shows you how to pick up atoms, bond them and read what you've built.</p>
+        </article>
+        <article class="mode reveal">
+          <span class="tag">II</span>
+          <svg viewBox="0 0 150 150" aria-hidden="true">
+            <g stroke="#6b7482" stroke-width="6" stroke-linecap="round">
+              <line x1="75" y1="30" x2="114" y2="52"/><line x1="114" y1="52" x2="114" y2="98"/><line x1="114" y1="98" x2="75" y2="120"/>
+              <line x1="75" y1="120" x2="36" y2="98"/><line x1="36" y1="98" x2="36" y2="52"/><line x1="36" y1="52" x2="75" y2="30"/>
+            </g>
+            <circle cx="75" cy="30" r="12" fill="url(#g-metal)"/><circle cx="114" cy="52" r="12" fill="url(#g-metal)"/>
+            <circle cx="114" cy="98" r="12" fill="url(#g-metal)"/><circle cx="75" cy="120" r="12" fill="url(#g-metal)"/>
+            <circle cx="36" cy="98" r="12" fill="url(#g-metal)"/><circle cx="36" cy="52" r="12" fill="url(#g-coral)"/>
+          </svg>
+          <h3>Free Mode</h3>
+          <p>Build any molecule you like: chains, rings, cages, up to a thousand atoms in one world.</p>
+        </article>
+        <article class="mode reveal">
+          <span class="tag">III</span>
+          <svg viewBox="0 0 150 150" aria-hidden="true">
+            <rect x="30" y="30" width="90" height="90" rx="18" fill="none" stroke="#a9c6f0" stroke-opacity=".28" stroke-dasharray="5 6"/>
+            <circle cx="62" cy="68" r="15" fill="url(#g-coral)"/>
+            <circle cx="92" cy="86" r="11" fill="url(#g-h)"/>
+            <circle cx="48" cy="96" r="11" fill="url(#g-h)"/>
+            <path d="M104 40 l6 6 l12 -14" fill="none" stroke="#e0764d" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <h3>Challenges</h3>
+          <p>A target structure and two trays of atoms. Work out how to build it, from simple molecules to rings like indole.</p>
+        </article>
+      </div>
+
+      <div class="details">
+        <div class="detail reveal">
+          <span class="k">DNA</span>
+          <h3>Assemble the double helix</h3>
+          <p>Build a nucleotide from atoms, join nucleotides into strands, pair A with T and C with G, and close the double helix.</p>
+        </div>
+        <div class="detail reveal">
+          <span class="k">π electrons</span>
+          <h3>See the electron clouds</h3>
+          <p>Aromatic rings carry their pi-electron cloud, the part of benzene a textbook can only draw as a circle.</p>
+        </div>
+        <div class="detail reveal">
+          <span class="k">26 languages</span>
+          <h3>In your language</h3>
+          <p>The interface and compound names come in 26 languages. It follows the headset's language, or pick your own.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="facts" role="region" aria-label="At a glance">
+    <div class="wrap">
+      <ul>
+        <li>Meta Quest</li>
+        <li>Plays offline</li>
+        <li>No account</li>
+        <li>No ads</li>
+        <li>No tracking</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="braid" aria-hidden="true" style="opacity:.9"></div>
+
+  <section class="sec studio" id="studio" aria-labelledby="studio-title">
+    <div class="wrap">
+      <div class="reveal">
+        <span class="label">The studio</span>
+        <p class="studio-name" id="studio-title">metalemma<span>.</span></p>
+      </div>
+      <div class="reveal">
+        <p class="lede">metalemma is an independent studio. We make MolCraft, and we'd like to hear what you build with it, what broke, or what you wish it did.</p>
+        <a class="mail" href="mailto:metalemma.studio@proton.me">metalemma.studio@proton.me <span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <span>© 2026 metalemma</span>
+    <span class="links">
+      <a href="molcraft/privacy/">MolCraft privacy policy</a>
+      <a href="mailto:metalemma.studio@proton.me">Contact</a>
+    </span>
+  </div>
+</footer>
+
+<script>
+  // Fade sections in as they scroll into view. Without JS everything is simply visible.
+  (function () {
+    if (!('IntersectionObserver' in window)) return;
+    document.documentElement.classList.add('js');
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+      });
+    }, { rootMargin: '0px 0px -8% 0px' });
+    document.querySelectorAll('.reveal').forEach(function (el, i) {
+      el.style.transitionDelay = (i % 3) * 90 + 'ms';
+      io.observe(el);
+    });
+  })();
+</script>
 </body>
 </html>
