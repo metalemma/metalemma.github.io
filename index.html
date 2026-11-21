@@ -23,7 +23,7 @@
   /* ---------- hero: an empty room in VR, with the studio's dot in it ---------- */
   .hero {
     position: relative; isolation: isolate; overflow: hidden;
-    min-height: min(100svh, 920px);
+    min-height: min(84svh, 820px);
     display: flex; align-items: flex-end;
   }
   .room { position: absolute; inset: 0; z-index: -1; pointer-events: none; }
@@ -120,50 +120,64 @@
   .count { font-family: var(--mono); font-size: 12px; letter-spacing: .14em; color: var(--ink-3); text-transform: uppercase; }
   .count b { color: var(--coral); font-weight: 400; }
 
+  /* ---------- works: the centre of the page ---------- */
+  .works {
+    background:
+      radial-gradient(ellipse 70% 55% at 50% 58%, rgba(20, 58, 108, 0.38), transparent 72%),
+      linear-gradient(180deg, var(--void), var(--navy) 45%, var(--navy) 60%, var(--void));
+  }
+
   /* ---------- game cards ----------
-     To add a game, copy one <article class="game"> inside .games and change its link,
-     art, title, pitch, platform and status. With one game the card lays out wide;
-     from two on they share a grid. */
+     One <article class="game"> per title; see the template comment in .games.
+     The whole card opens the game's page (the title link is stretched over it);
+     the store slot sits above that and is a real link only once the store page exists.
+     With one title the card lays out wide; from two on they share a grid. */
   .games {
     margin-top: clamp(36px, 5vw, 56px);
     display: grid; gap: 24px;
     grid-template-columns: repeat(auto-fill, minmax(min(100%, 460px), 1fr));
   }
-  .game > a {
-    display: grid; height: 100%;
-    color: inherit; text-decoration: none;
+  .game {
+    position: relative; display: flex; flex-direction: column;
     border: 1px solid var(--line); border-radius: 26px; overflow: hidden;
-    background: linear-gradient(170deg, rgba(14, 38, 72, 0.55), rgba(3, 8, 18, 0.9) 70%);
+    background: linear-gradient(170deg, rgba(14, 38, 72, 0.55), rgba(3, 8, 18, 0.92) 70%);
     transition: border-color .35s, transform .5s cubic-bezier(.2,.7,.2,1), box-shadow .5s;
   }
-  .game > a:hover {
+  .game:hover {
     border-color: var(--line-strong); transform: translateY(-4px);
     box-shadow: 0 30px 70px -30px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(224, 118, 77, 0.12);
   }
+  .game:focus-within { border-color: var(--coral); }
   .game figure { margin: 0; position: relative; overflow: hidden; aspect-ratio: 16 / 9; background: #020611; }
   .game figure img { width: 100%; height: 100%; object-fit: cover; transition: transform 1.2s cubic-bezier(.2,.7,.2,1); }
-  .game > a:hover figure img { transform: scale(1.035); }
-  .game-body { padding: 30px 32px 32px; display: flex; flex-direction: column; gap: 14px; }
+  .game:hover figure img { transform: scale(1.035); }
+  .game-body { flex: 1; padding: 30px 32px 32px; display: flex; flex-direction: column; gap: 14px; }
   .game .no { font-family: var(--mono); font-size: 12px; letter-spacing: .14em; color: var(--ink-3); }
   .game h3 { margin: 0; font-size: clamp(32px, 3.4vw, 44px); line-height: 1; font-weight: 400; letter-spacing: -0.025em; }
+  .game h3 a { color: inherit; text-decoration: none; }
+  .game h3 a:focus-visible { outline: none; }
+  .game h3 a::after { content: ""; position: absolute; inset: 0; z-index: 1; } /* whole card clickable */
   .game .pitch { margin: 0; color: var(--ink-2); font-size: 18px; max-width: 420px; }
   .game .meta { margin: 8px 0 0; padding: 0; list-style: none; display: flex; flex-wrap: wrap; gap: 10px; }
-  .game .meta li {
+  .game .meta li, .game .store {
     display: inline-flex; align-items: center; gap: 9px;
     padding: 7px 14px; border-radius: 999px;
     border: 1px solid var(--line-strong); background: rgba(111, 159, 224, 0.06);
-    font-size: 14px; color: var(--ink-2);
+    font-size: 14px; color: var(--ink-2); text-decoration: none;
   }
-  .game .meta .status::before {
+  .game .store::before {
     content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--coral);
     box-shadow: 0 0 0 0 rgba(224, 118, 77, 0.6); animation: ping 2.4s ease-out infinite;
   }
+  a.store { position: relative; z-index: 2; color: var(--ink); border-color: rgba(224, 118, 77, 0.5); }
+  a.store:hover { border-color: var(--coral); background: rgba(224, 118, 77, 0.12); }
   @keyframes ping { 70%, 100% { box-shadow: 0 0 0 8px rgba(224, 118, 77, 0); } }
-  .game .go { margin-top: auto; padding-top: 18px; font-size: 15px; color: var(--ink); display: inline-flex; gap: 10px; }
+  .game .actions { margin-top: auto; padding-top: 18px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 14px 24px; }
+  .game .go { font-size: 15px; color: var(--ink); display: inline-flex; gap: 10px; }
   .game .go span { color: var(--coral); transition: transform .25s; }
-  .game > a:hover .go span { transform: translateX(5px); }
+  .game:hover .go span { transform: translateX(5px); }
 
-  /* a single game gets the full width: the art at full size, the details in a row beneath it */
+  /* a single title gets the full width: the art at full size, the details in a row beneath it */
   @media (min-width: 1000px) {
     .game:only-child { grid-column: 1 / -1; }
     .game:only-child .game-body {
@@ -172,7 +186,7 @@
     }
     .game:only-child .no, .game:only-child h3, .game:only-child .pitch { grid-column: 1; }
     .game:only-child .meta { grid-column: 2; grid-row: 2; margin: 0; justify-content: flex-end; }
-    .game:only-child .go { grid-column: 2; grid-row: 3; margin: 0; padding: 0; justify-self: end; }
+    .game:only-child .actions { grid-column: 2; grid-row: 3; margin: 0; padding: 0; justify-content: flex-end; }
   }
 
   /* ---------- contact ---------- */
@@ -212,13 +226,14 @@
     .horizon { background: linear-gradient(90deg, transparent 5%, rgba(169, 198, 240, 0.32) 35%, rgba(169, 198, 240, 0.32) 65%, transparent 95%); }
     .orb { left: 50%; top: 40%; width: 30vw; }
     .room::before { background: radial-gradient(ellipse 80% 40% at 50% 62%, rgba(28, 72, 130, 0.42), transparent 70%); }
-    .hero .wrap { padding-top: 0; padding-bottom: 72px; }
+    .hero .wrap { padding-top: 0; padding-bottom: 24px; }
     .hero h1 { margin-top: 18px; }
     .contact .wrap { grid-template-columns: 1fr; }
   }
   @media (max-width: 560px) {
     body { font-size: 16px; }
     .game-body { padding: 24px 22px 26px; }
+    .game .actions { padding-top: 6px; }
     .game .pitch, .contact p { font-size: 17px; }
     .bar nav a.opt { display: none; }
   }
@@ -231,7 +246,7 @@
   <div class="wrap">
     <a class="studio-mark" href="./" aria-label="metalemma home"><span class="dot" aria-hidden="true"></span>metalemma</a>
     <nav aria-label="Site">
-      <a href="#games">Games</a>
+      <a href="#works">Works</a>
       <a href="#contact">Contact</a>
     </nav>
   </div>
@@ -250,41 +265,66 @@
         <span class="label">Independent studio</span>
         <h1 id="studio-title">metalemma<span>.</span></h1>
         <p class="lede">We make games for <strong>virtual reality</strong>, built for the headset and played with your hands.</p>
-        <a class="jump" href="#games">See our games <span aria-hidden="true">↓</span></a>
+        <a class="jump" href="#works">See our works <span aria-hidden="true">↓</span></a>
       </div>
     </div>
   </section>
 
-  <section class="sec" id="games" aria-labelledby="games-title">
+  <section class="sec works" id="works" aria-labelledby="works-title">
     <div class="wrap">
       <div class="sec-head reveal">
         <div>
-          <span class="label">Games</span>
-          <h2 id="games-title">What we make</h2>
+          <span class="label">Works</span>
+          <h2 id="works-title">Games we've made</h2>
         </div>
-        <span class="count"><b>01</b> game</span>
+        <span class="count"><b>01</b> title</span>
       </div>
 
       <div class="games">
-        <article class="game reveal">
-          <a href="molcraft/">
+        <!--
+          To add a title, copy this template above or below the existing card and fill it in,
+          then bump the count in .sec-head above. Art: 16:9, served as 800w/1440w webp plus a jpg.
+
+          <article class="game reveal">
             <figure>
               <picture>
-                <source type="image/webp" srcset="assets/molcraft-cover-800.webp 800w, assets/molcraft-cover-1440.webp 1440w" sizes="(min-width: 1000px) 60vw, 100vw">
-                <img src="assets/molcraft-cover-1120.jpg" width="1120" height="630" alt="MolCraft key art: a molecule ring with one coral atom, beside the MolCraft logotype" loading="lazy">
+                <source type="image/webp" srcset="assets/GAME-cover-800.webp 800w, assets/GAME-cover-1440.webp 1440w" sizes="(min-width: 1000px) 50vw, 100vw">
+                <img src="assets/GAME-cover-1120.jpg" width="1120" height="630" alt="GAME key art" loading="lazy">
               </picture>
             </figure>
             <div class="game-body">
-              <span class="no">No. 01</span>
-              <h3>MolCraft</h3>
-              <p class="pitch">Build molecules atom by atom, in virtual reality.</p>
-              <ul class="meta">
-                <li>Meta Quest</li>
-                <li class="status">Coming to Meta Horizon Store</li>
-              </ul>
-              <span class="go">View game <span aria-hidden="true">→</span></span>
+              <span class="no">No. 02</span>
+              <h3><a href="GAME/">Game title</a></h3>
+              <p class="pitch">One-line pitch.</p>
+              <ul class="meta"><li>Meta Quest</li></ul>
+              <div class="actions">
+                <span class="store">Coming to Meta Horizon Store</span>
+                <span class="go" aria-hidden="true">View game <span>→</span></span>
+              </div>
             </div>
-          </a>
+          </article>
+
+          Store slot: once the store page is live, replace the span with
+          <a class="store" href="https://www.meta.com/experiences/...">Get it on Meta Horizon Store</a>
+          Never put a placeholder URL there.
+        -->
+        <article class="game reveal">
+          <figure>
+            <picture>
+              <source type="image/webp" srcset="assets/molcraft-cover-800.webp 800w, assets/molcraft-cover-1440.webp 1440w" sizes="(min-width: 1000px) 80vw, 100vw">
+              <img src="assets/molcraft-cover-1120.jpg" width="1120" height="630" alt="MolCraft key art: a molecule ring with one coral atom, beside the MolCraft logotype" loading="lazy">
+            </picture>
+          </figure>
+          <div class="game-body">
+            <span class="no">No. 01</span>
+            <h3><a href="molcraft/">MolCraft</a></h3>
+            <p class="pitch">Build molecules atom by atom, in virtual reality.</p>
+            <ul class="meta"><li>Meta Quest</li></ul>
+            <div class="actions">
+              <span class="store">Coming to Meta Horizon Store</span>
+              <span class="go" aria-hidden="true">View game <span>→</span></span>
+            </div>
+          </div>
         </article>
       </div>
     </div>
