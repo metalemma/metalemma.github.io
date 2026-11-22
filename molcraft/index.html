@@ -13,7 +13,8 @@
 <meta property="og:url" content="https://metalemma.github.io/molcraft/">
 <meta property="og:image" content="https://metalemma.github.io/assets/og.jpg">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="icon" type="image/png" href="../assets/favicon.png">
+<link rel="icon" href="../assets/favicon.ico" sizes="16x16 32x32 48x48">
+<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
 <link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
 <link rel="preload" href="../assets/outfit.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="../assets/site.css">
@@ -216,7 +217,7 @@
     margin: 22px 0 0;
     font-size: clamp(56px, 10vw, 148px); line-height: .9; font-weight: 200; letter-spacing: -0.05em;
   }
-  .studio .studio-name span { color: var(--coral); }
+  .studio .studio-name img { display: block; width: min(100%, 6.06em); height: auto; }
   .studio p.lede { margin: 0 0 22px; color: var(--ink-2); font-size: 19px; max-width: 470px; }
   .mail {
     display: inline-flex; align-items: center; gap: 12px;
@@ -276,7 +277,7 @@
 
 <header class="bar">
   <div class="wrap">
-    <a class="studio-mark" href="../" aria-label="MetaLemma home"><span class="dot" aria-hidden="true"></span>MetaLemma</a>
+    <a class="studio-mark" href="../" aria-label="MetaLemma home"><img src="../assets/metalemma.svg" alt="" width="156" height="19"></a>
     <nav aria-label="Site">
       <a class="opt" href="#molcraft">How it plays</a>
       <a class="opt" href="#modes">Modes</a>
@@ -506,7 +507,7 @@
     <div class="wrap">
       <div class="reveal">
         <span class="label">Made by</span>
-        <p class="studio-name" id="studio-title"><a href="../">MetaLemma<span>.</span></a></p>
+        <p class="studio-name" id="studio-title"><a href="../"><img src="../assets/metalemma.svg" alt="MetaLemma" width="786" height="96"></a></p>
       </div>
       <div class="reveal">
         <p class="lede">MolCraft is made by MetaLemma, an independent studio making games for virtual reality. We'd like to hear what you build with it, what broke, or what you wish it did.</p>
