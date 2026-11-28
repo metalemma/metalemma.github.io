@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice">
-<!-- Placeholder for the untitled ski game: contour lines of a slope. Replace with key art when it exists. -->
+<!-- Placeholder for the next game: contour lines. Replace with key art when it exists. -->
 <defs>
 <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#02040a"/><stop offset=".45" stop-color="#061327"/><stop offset="1" stop-color="#0b2547"/></linearGradient>
 <radialGradient id="snow" cx=".62" cy=".24" r=".55"><stop offset="0" stop-color="#a9c6f0" stop-opacity=".30"/><stop offset="1" stop-color="#a9c6f0" stop-opacity="0"/></radialGradient>
